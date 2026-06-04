@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부동산 갈아타기 현금흐름 시뮬레이터</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-indigo-600 text-white rounded-xl">
+                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900">갈아타기 현금흐름 시뮬레이터</h1>
+                    <p class="text-xs text-slate-500">수자인(매도) & 신미주(매입) 일자별 흐름 설계 보드</p>
+                </div>
+            </div>
+            <div class="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1">
+                <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+                실시간 연동 중
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- 대시보드 요약 카드 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- 1. 시작 자금 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">시작 잔고 (6/4)</p>
+                <h3 class="text-2xl font-black text-slate-900 mt-2" id="sum_start_cash">50,000,000원</h3>
+                <p class="text-xs text-slate-400 mt-1">현재 통장 가용 자금</p>
+            </div>
+
+            <!-- 2. 기간 중 최저 잔고 리스크 -->
+            <div id="status_card" class="p-6 rounded-2xl border shadow-sm relative overflow-hidden transition-all duration-300">
+                <p class="text-xs font-semibold uppercase tracking-wider" id="status_title">전체 흐름 중 최저 잔고</p>
+                <h3 class="text-2xl font-black mt-2" id="dashboard_min_balance">계산 중</h3>
+                <p class="text-xs mt-1" id="status_desc">데이터 연동 분석 중</p>
+            </div>
+
+            <!-- 3. 이사 완료 후 최종 잔액 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">이사 정리 후 최종 잔고</p>
+                <h3 class="text-2xl font-black text-indigo-600 mt-2" id="dashboard_final_balance">0원</h3>
+                <p class="text-xs text-slate-400 mt-1">모든 유입/유출 정리 완료 기준</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- 왼쪽: 데이터 입력 패널 (L: 5 cols) -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- 1. 보유 자산 및 대출 정보 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="wallet" class="w-5 h-5 text-indigo-600"></i>
+                        기본 자산 및 고정 수입
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">현재 통장 잔고 (6/4)</label>
+                            <input type="text" id="current_cash" value="50,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_current_cash">5,000만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">월급 저축액 (매월말)</label>
+                            <input type="text" id="monthly_savings" value="3,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_monthly_savings">월 300만 원씩</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 매도 주택 (수자인) 정보 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="home" class="w-5 h-5 text-emerald-600"></i>
+                        매도 주택 (수자인)
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">매도 금액 (총액)</label>
+                            <input type="text" id="sell_price" value="350,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-emerald-600 mt-1" id="txt_sell_price">3억 5,000만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">계약금 (수령)</label>
+                            <input type="text" id="sell_deposit" value="35,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_sell_deposit">3,500만 원 (수령완료)</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">기존 대출 상환액</label>
+                            <input type="text" id="sell_loan_repay" value="181,600,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-red-500 mt-1" id="txt_sell_loan_repay">1억 8,160만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">수자인 중개 보수 (복비)</label>
+                            <input type="text" id="sell_broker_fee" value="1,200,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_sell_broker_fee">120만 원</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 매입 주택 (신미주) 정보 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="key-round" class="w-5 h-5 text-indigo-600"></i>
+                        매입 주택 (신미주)
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">매입 금액 (총액)</label>
+                            <input type="text" id="buy_price" value="650,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-indigo-600 mt-1" id="txt_buy_price">6억 5,000만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">계약금 (송금)</label>
+                            <input type="text" id="buy_deposit" value="65,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_buy_deposit">6,500만 원</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">신규 대출 실행금</label>
+                            <input type="text" id="buy_loan" value="416,500,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-emerald-600 mt-1" id="txt_buy_loan">4억 1,650만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">신미주 중개 보수 (복비)</label>
+                            <input type="text" id="buy_broker_fee" value="2,860,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_buy_broker_fee">286만 원</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. 이사 및 부대비용 정보 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="truck" class="w-5 h-5 text-amber-500"></i>
+                        이사 및 기타 비용 정보
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">이사 비용 (보관이사 등)</label>
+                            <input type="text" id="move_cost" value="3,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_move_cost">300만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">월세 및 단기 거주비</label>
+                            <input type="text" id="rent_cost" value="1,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_rent_cost">100만 원</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">취득세 및 세금</label>
+                            <input type="text" id="tax_cost" value="8,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_tax_cost">800만 원</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">신생아 취득세 환급 (+)</label>
+                            <input type="text" id="baby_refund" value="5,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                            <p class="text-[11px] text-emerald-600 mt-1" id="txt_baby_refund">500만 원 환급 예정</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2 border-t border-slate-100">
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">인테리어 예상 비용</label>
+                        <input type="text" id="interior_cost" value="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleInput(this)">
+                        <p class="text-[11px] text-slate-400 mt-1" id="txt_interior_cost">없음 (0원)</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 오른쪽: 시뮬레이션 결과 대시보드 (R: 7 cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- 8/14 실질 자금 쇼티지 비주얼 게이지 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
+                        자금 쇼티지 모니터링 (가장 낮아지는 구간 자금상태)
+                    </h3>
+                    <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden flex">
+                        <div id="gauge_safe" class="bg-emerald-500 h-full transition-all duration-500" style="width: 50%"></div>
+                        <div id="gauge_short" class="bg-red-500 h-full transition-all duration-500" style="width: 50%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-slate-400 mt-2">
+                        <span>보유/대출 여유 상태</span>
+                        <span class="font-bold" id="gauge_text">자금 부족: 0원</span>
+                    </div>
+                </div>
+
+                <!-- 타임라인 흐름도 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i data-lucide="milestone" class="w-5 h-5 text-indigo-600"></i>
+                                시간 순 현금 흐름 타임라인 (상세 테이블)
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1">왼쪽의 기본 정보 및 이사 비용 정보가 날짜별 거래 장부에 자동 반영됩니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-400 font-semibold">
+                                    <th class="py-2.5 px-2 w-[70px]">일자</th>
+                                    <th class="py-2.5 px-2">내용</th>
+                                    <th class="py-2.5 px-2 w-[100px] text-right text-emerald-600">입금 (+)</th>
+                                    <th class="py-2.5 px-2 w-[100px] text-right text-rose-500">출금 (-)</th>
+                                    <th class="py-2.5 px-2 w-[120px] text-right bg-slate-50/50 text-slate-700">누적 잔액</th>
+                                </tr>
+                            </thead>
+                            <tbody id="flow_table_body" class="divide-y divide-slate-100">
+                                <!-- 자바스크립트로 연동 렌더링 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 전문가 가이드 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-md font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-500"></i>
+                        갈아타기 현금 흐름 전문가 조언
+                    </h3>
+                    <div class="text-sm text-slate-600 leading-relaxed space-y-2.5" id="expert_comment">
+                        <!-- 동적으로 변화함 -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-20 py-8 text-center text-slate-400 text-xs">
+        <p>© 2026 부동산 현금 흐름 솔루션. 실제 엑셀 시트 연동 분석 버전.</p>
+    </footer>
+
+    <script>
+        // 숫자에 천 단위 콤마를 넣어주는 헬퍼 함수
+        function formatNumberWithCommas(num) {
+            const parsed = parseInt(num.toString().replace(/[^0-9]/g, ''), 10);
+            if (isNaN(parsed)) return '0';
+            return parsed.toLocaleString('ko-KR');
+        }
+
+        // 콤마가 포함된 문자열을 순수 숫자로 정제해 주는 헬퍼 함수
+        function parseRawNumber(str) {
+            const cleanStr = str.replace(/,/g, '');
+            const parsed = parseFloat(cleanStr);
+            return isNaN(parsed) ? 0 : parsed;
+        }
+
+        // 사용자가 입력을 할 때 실행되는 마스킹 & 포맷팅 함수
+        function handleInput(input) {
+            let cursorPosition = input.selectionStart;
+            const originalLength = input.value.length;
+
+            const rawValue = input.value.replace(/[^0-9]/g, '');
+            
+            if (rawValue === '') {
+                input.value = '0';
+            } else {
+                input.value = formatNumberWithCommas(rawValue);
+            }
+
+            const newLength = input.value.length;
+            cursorPosition = cursorPosition + (newLength - originalLength);
+            input.setSelectionRange(cursorPosition, cursorPosition);
+
+            // 실시간 현금 흐름 연동
+            calculateFlow();
+        }
+
+        // 한국어 만 단위 변환 유틸리티 함수
+        function formatWon(val) {
+            if (val === 0) return "0원";
+            const isNegative = val < 0;
+            let absVal = Math.abs(val);
+            
+            const eok = Math.floor(absVal / 100000000);
+            const man = Math.floor((absVal % 100000000) / 10000);
+            
+            let result = "";
+            if (eok > 0) result += eok + "억 ";
+            if (man > 0) result += man.toLocaleString() + "만";
+            result += " 원";
+            
+            return (isNegative ? "-" : "") + result.trim();
+        }
+
+        // 3자리마다 콤마 포맷팅 헬퍼
+        function formatCommas(num) {
+            return Math.floor(num).toLocaleString('ko-KR');
+        }
+
+        function calculateFlow() {
+            // 1. 왼쪽 인풋 데이터 수집
+            const current_cash = parseRawNumber(document.getElementById('current_cash').value);
+            const monthly_savings = parseRawNumber(document.getElementById('monthly_savings').value);
+
+            const sell_price = parseRawNumber(document.getElementById('sell_price').value);
+            const sell_deposit = parseRawNumber(document.getElementById('sell_deposit').value);
+            const sell_loan_repay = parseRawNumber(document.getElementById('sell_loan_repay').value);
+            const sell_broker_fee = parseRawNumber(document.getElementById('sell_broker_fee').value);
+
+            const buy_price = parseRawNumber(document.getElementById('buy_price').value);
+            const buy_deposit = parseRawNumber(document.getElementById('buy_deposit').value);
+            const buy_loan = parseRawNumber(document.getElementById('buy_loan').value);
+            const buy_broker_fee = parseRawNumber(document.getElementById('buy_broker_fee').value);
+
+            const move_cost = parseRawNumber(document.getElementById('move_cost').value);
+            const rent_cost = parseRawNumber(document.getElementById('rent_cost').value);
+            const tax_cost = parseRawNumber(document.getElementById('tax_cost').value);
+            const baby_refund = parseRawNumber(document.getElementById('baby_refund').value);
+            const interior_cost = parseRawNumber(document.getElementById('interior_cost').value);
+
+            // 보조 텍스트 출력 한글 변환
+            document.getElementById('txt_current_cash').innerText = formatWon(current_cash);
+            document.getElementById('txt_monthly_savings').innerText = `월 ${formatWon(monthly_savings)}씩 저축`;
+            document.getElementById('txt_sell_price').innerText = formatWon(sell_price);
+            document.getElementById('txt_sell_deposit').innerText = formatWon(sell_deposit) + " 수령";
+            document.getElementById('txt_sell_loan_repay').innerText = formatWon(sell_loan_repay);
+            document.getElementById('txt_sell_broker_fee').innerText = formatWon(sell_broker_fee);
+            document.getElementById('txt_buy_price').innerText = formatWon(buy_price);
+            document.getElementById('txt_buy_deposit').innerText = formatWon(buy_deposit) + " 지출";
+            document.getElementById('txt_buy_loan').innerText = formatWon(buy_loan);
+            document.getElementById('txt_buy_broker_fee').innerText = formatWon(buy_broker_fee);
+            document.getElementById('txt_move_cost').innerText = formatWon(move_cost);
+            document.getElementById('txt_rent_cost').innerText = formatWon(rent_cost);
+            document.getElementById('txt_tax_cost').innerText = formatWon(tax_cost);
+            document.getElementById('txt_baby_refund').innerText = formatWon(baby_refund);
+            document.getElementById('txt_interior_cost').innerText = interior_cost > 0 ? formatWon(interior_cost) : "없음 (0원)";
+
+            // 2. 엑셀 스케줄에 따른 일자별 정산 내역 모델링
+            const sell_remaining_gain = sell_price - sell_deposit; // 수자인 매도 잔금 (대출 상환 전)
+
+            const schedule = [
+                { date: "6/4", desc: "현재잔액", income: current_cash, expense: 0 },
+                { date: "6/7", desc: "수자인 계약금 수령", income: sell_deposit, expense: 0 },
+                { date: "6/8", desc: "신미주 계약금 지출", income: 0, expense: buy_deposit },
+                { date: "6/8", desc: "수자인 부동산 복비 지출", income: 0, expense: sell_broker_fee },
+                { date: "6/8", desc: "신미주 부동산 복비 지출", income: 0, expense: buy_broker_fee },
+                { date: "6/30", desc: "6월 월급 저축", income: monthly_savings, expense: 0 },
+                { date: "7/31", desc: "7월 월급 저축", income: monthly_savings, expense: 0 },
+                { date: "8/31", desc: "8월 월급 저축", income: monthly_savings, expense: 0 },
+                { date: "9/1", desc: "수자인 매도 잔금 수령", income: sell_remaining_gain, expense: 0 },
+                { date: "9/1", desc: "수자인 대출 상환", income: 0, expense: sell_loan_repay },
+                { date: "9/1", desc: "신미주 주담대 대출 실행", income: buy_loan, expense: 0 },
+                { date: "9/1", desc: "신미주 매입 잔금 지출", income: 0, expense: buy_price - buy_deposit },
+                { date: "9/15", desc: "이사 비용 지출", income: 0, expense: move_cost },
+                { date: "9/15", desc: "월세 지출", income: 0, expense: rent_cost },
+                { date: "9/15", desc: "취득세 및 세금 지출", income: 0, expense: tax_cost },
+                { date: "9/15", desc: "신생아 취득세 환급", income: baby_refund, expense: 0 }
+            ];
+
+            // 인테리어 비용이 있을 경우 9/15일자에 임시 추가
+            if (interior_cost > 0) {
+                schedule.push({ date: "9/15", desc: "인테리어 시공비 지출", income: 0, expense: interior_cost });
+            }
+
+            // 날짜 기반 정렬 (계산 일련성 확보를 위함)
+            // 6/4 -> 6/7 -> 6/8 -> 6/30 -> 7/31 -> 8/31 -> 9/1 -> 9/15 순서
+            function getSortVal(dateStr) {
+                const parts = dateStr.split('/');
+                const month = parseInt(parts[0]);
+                const day = parseInt(parts[1]);
+                return month * 100 + day;
+            }
+
+            schedule.sort((a, b) => getSortVal(a.date) - getSortVal(b.date));
+
+            // 테이블 렌더링 및 실시간 누적잔액 계산
+            const tbody = document.getElementById('flow_table_body');
+            tbody.innerHTML = '';
+
+            let accum = 0;
+            let minBalance = Infinity;
+
+            schedule.forEach((item, index) => {
+                if (index === 0) {
+                    accum = item.income;
+                } else {
+                    accum = accum + item.income - item.expense;
+                }
+
+                if (accum < minBalance) {
+                    minBalance = accum;
+                }
+
+                const tr = document.createElement('tr');
+                if (accum < 0) {
+                    tr.className = "bg-rose-50 hover:bg-rose-100 transition-colors font-semibold";
+                } else {
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                }
+
+                const incomeText = item.income > 0 && item.desc !== "현재잔액" ? `+${formatCommas(item.income)}` : (item.income > 0 ? formatCommas(item.income) : "-");
+                const expenseText = item.expense > 0 ? `-${formatCommas(item.expense)}` : "-";
+
+                tr.innerHTML = `
+                    <td class="py-2 px-2 font-medium text-slate-500">${item.date}</td>
+                    <td class="py-2 px-2 font-bold text-slate-900">${item.desc}</td>
+                    <td class="py-2 px-2 text-right font-semibold text-emerald-600">${incomeText}</td>
+                    <td class="py-2 px-2 text-right font-semibold text-rose-500">${expenseText}</td>
+                    <td class="py-2 px-2 text-right font-black ${accum < 0 ? 'text-rose-600' : 'text-slate-950'}">${formatCommas(accum)}원</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const finalBalance = accum;
+
+            // 대시보드 갱신
+            document.getElementById('sum_start_cash').innerText = formatWon(current_cash);
+            document.getElementById('dashboard_final_balance').innerText = formatWon(finalBalance);
+            
+            const minBalElement = document.getElementById('dashboard_min_balance');
+            minBalElement.innerText = formatWon(minBalance);
+
+            // 최저 잔액 상태 진단 카드 색상 조절
+            const status_card = document.getElementById('status_card');
+            const status_title = document.getElementById('status_title');
+            const status_desc = document.getElementById('status_desc');
+
+            if (minBalance < 0) {
+                status_card.className = "p-6 rounded-2xl border border-rose-300 bg-rose-50 text-rose-900 relative overflow-hidden";
+                status_title.innerText = "🚨 최저 잔고 (자금 펑크 발생)";
+                status_desc.innerText = "전체 일정 중 현금이 마이너스가 되는 구간이 있습니다!";
+                minBalElement.className = "text-2xl font-black text-rose-600 mt-2";
+            } else {
+                status_card.className = "p-6 rounded-2xl border border-emerald-300 bg-emerald-50 text-emerald-950 relative overflow-hidden";
+                status_title.innerText = "✔ 최저 잔고 (안전 마진 확보)";
+                status_desc.innerText = "일정 전체 동안 잔고가 마이너스로 내려가지 않습니다!";
+                minBalElement.className = "text-2xl font-black text-emerald-600 mt-2";
+            }
+
+            // 게이지바 연산
+            const gauge_safe = document.getElementById('gauge_safe');
+            const gauge_short = document.getElementById('gauge_short');
+            const gauge_text = document.getElementById('gauge_text');
+
+            if (minBalance < 0) {
+                const total_req = buy_deposit + (buy_price - buy_deposit) + sell_loan_repay + tax_cost + move_cost + rent_cost + sell_broker_fee + buy_broker_fee + interior_cost;
+                const deficit = Math.abs(minBalance);
+                const short_percent = Math.min(100, (deficit / total_req) * 100 * 5); // 비율 가시성을 위해 약간 가중치 부여
+                const safe_percent = 100 - short_percent;
+
+                gauge_safe.style.width = `${safe_percent}%`;
+                gauge_short.style.width = `${short_percent}%`;
+                gauge_text.innerText = `위험 지점 부족 금액: ${formatWon(deficit)}`;
+                gauge_text.className = "font-bold text-red-500 animate-pulse";
+            } else {
+                gauge_safe.style.width = "100%";
+                gauge_short.style.width = "0%";
+                gauge_text.innerText = "전 구간 정상 운용 가능 (적자 위험 없음)";
+                gauge_text.className = "font-bold text-emerald-600";
+            }
+
+            // 전문가 가이드 메시지 작성
+            updateExpertComments(minBalance, finalBalance, buy_loan);
+        }
+
+        function updateExpertComments(minBal, finalBal, currentBuyLoan) {
+            const commentBox = document.getElementById('expert_comment');
+            let commentHtml = "";
+
+            if (minBal < 0) {
+                const shortageAmt = Math.abs(minBal);
+                const recommended_loan = Math.ceil(shortageAmt / 1000000) * 1000000; // 백만원단위 올림
+                commentHtml = `
+                    <div class="space-y-3">
+                        <div class="flex gap-2">
+                            <span class="text-rose-500 font-bold">⚠️ 자금 펑크 경보:</span>
+                            <p>엑셀 분석 결과, 최종 이사비와 세금(취득세)을 치르고 나면 최종 자금이 <strong>${formatWon(shortageAmt)}</strong> 부족(적자)한 상태가 됩니다.</p>
+                        </div>
+                        <div class="p-4 bg-indigo-50 border border-indigo-150 rounded-xl space-y-2">
+                            <p class="text-xs font-bold text-indigo-900">💡 전문가 조언 솔루션 2가지:</p>
+                            <ul class="text-xs text-indigo-950 list-decimal pl-4 space-y-1.5 leading-relaxed">
+                                <li>
+                                    <strong>신미주 디딤돌/주담대 한도 증액:</strong><br>
+                                    현재 신미주 대출 예정 금액인 ${formatWon(currentBuyLoan)}에서 <strong>최소 ${formatWon(recommended_loan)} 이상 증액한 대출 실행</strong>이 가능한지 대출 상담사나 은행 지점에 최우선으로 검토 요청을 하셔야 합니다.
+                                </li>
+                                <li>
+                                    <strong>6월 수자인 계약금 확보 후 신용대출 준비:</strong><br>
+                                    주담대 증액이 아예 불가능할 시, 수자인 계약금이 들어오는 6월 7일 이후 ~ 9월 잔금일 전 사이에 <strong>약 2,000만 원 규모의 비상 신용 대출(마이너스 통장 등)</strong>을 미리 확보해 두셔야 잔금일과 취득세 납부 시점의 정체를 피할 수 있습니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } else {
+                commentHtml = `
+                    <div class="space-y-3">
+                        <div class="flex gap-2 text-emerald-700">
+                            <span class="text-emerald-500 font-bold">✔ 자금 설계 완벽:</span>
+                            <p>현재 보유액과 매월 저축액, 그리고 대출금을 조합했을 때 전 기간 마이너스로 치닫는 리스크 구간이 전혀 없는 <strong>완벽하게 정돈된 골디락스 현금흐름</strong>입니다.</p>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            다만 6월 8일 신미주 계약금과 복비를 정산한 직후 통장 잔고가 약 <strong>1,594만 원</strong>까지 급격하게 낮아집니다. 6월초부터 9월초 잔금을 수령할 때까지 약 3달 동안은 불필요한 고액 소비가 발생하지 않도록 주의하여 관리해 주십시오.
+                        </p>
+                    </div>
+                `;
+            }
+
+            commentBox.innerHTML = commentHtml;
+        }
+
+        window.onload = function() {
+            calculateFlow();
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
