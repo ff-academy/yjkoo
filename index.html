@@ -22,8 +22,8 @@
                     <i data-lucide="trending-up" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-slate-900">💸 갈아타기 현금 흐름 💸 </h1>
-                    <p class="text-xs text-slate-500">양주에서 동탄으로 🏠</p>
+                    <h1 class="text-xl font-bold text-slate-900">갈아타기 현금 흐름 시뮬레이터</h1>
+                    <p class="text-xs text-slate-500">수자인(매도) & 신미주(매입) 갈아타자!!!</p>
                 </div>
             </div>
             <div class="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1">
@@ -37,9 +37,9 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">CMA 잔고</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">시작 잔고 (6/4)</p>
                 <h3 class="text-2xl font-black text-slate-900 mt-2" id="sum_start_cash">50,000,000원</h3>
-                <p class="text-xs text-slate-400 mt-1">현재 가용 자금</p>
+                <p class="text-xs text-slate-400 mt-1">현재 통장 가용 자금</p>
             </div>
 
             <div id="status_card" class="p-6 rounded-2xl border shadow-sm relative overflow-hidden transition-all duration-300">
@@ -67,14 +67,14 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">현재 통장 잔고 (6월 초 기준)</label>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">현재 통장 잔고 (6/4)</label>
                             <input type="text" id="current_cash" value="50,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('current_cash', this.value)">
-                            <p class="text-[11px] text-slate-400 mt-1" id="txt_current_cash">(보수적으로)</p>
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_current_cash">5,000만 원</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">월급 저축액 (6,7,8월 말)</label>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">월급 저축액 (매월말)</label>
                             <input type="text" id="monthly_savings" value="3,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('monthly_savings', this.value)">
-                            <p class="text-[11px] text-slate-400 mt-1" id="txt_monthly_savings">(예상)</p>
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_monthly_savings">월 300만 원씩</p>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                             <i data-lucide="home" class="w-5 h-5 text-emerald-600"></i>
-                            매도 주택 (양주회천 한양수자인)
+                            매도 주택 (수자인)
                         </h2>
                     </div>
                     
@@ -110,9 +110,9 @@
                             <p class="text-[11px] text-red-500 mt-1" id="txt_sell_loan_repay">1억 8,160만 원</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">고래 부동산 중개수수료</label>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">수자인 부동산 복비</label>
                             <input type="text" id="sell_broker_fee" value="1,200,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('sell_broker_fee', this.value)">
-                            <p class="text-[11px] text-slate-400 mt-1" id="txt_sell_broker_fee">120만</p>
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_sell_broker_fee">120만 원</p>
                         </div>
                     </div>
 
@@ -128,7 +128,7 @@
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="key-round" class="w-5 h-5 text-indigo-600"></i>
-                        매입 주택 (동탄역 신미주)
+                        매입 주택 (신미주)
                     </h2>
 
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60 space-y-2">
@@ -154,8 +154,8 @@
                                 <label class="block text-xs font-semibold text-slate-500">계약금 (송금)</label>
                                 <span class="text-[9px] bg-indigo-50 text-indigo-700 px-1 py-0.5 rounded font-bold">10% 자동계산</span>
                             </div>
-                            <input type="text" id="buy_deposit" value="65,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('buy_deposit', this.value)">
-                            <p class="text-[11px] text-slate-400 mt-1" id="txt_buy_deposit">6,500만 원</p>
+                            <input type="text" id="buy_deposit" value="60,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('buy_deposit', this.value)">
+                            <p class="text-[11px] text-slate-400 mt-1" id="txt_buy_deposit">6,000만 원</p>
                         </div>
                     </div>
 
@@ -169,7 +169,7 @@
                             <p class="text-[11px] text-emerald-600 mt-1" id="txt_buy_loan">4억 1,650만 원</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">풍성 부동산 중개 수수료</label>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">신미주 중개 보수 (복비)</label>
                             <input type="text" id="buy_broker_fee" value="2,860,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('buy_broker_fee', this.value)">
                             <p class="text-[11px] text-slate-400 mt-1" id="txt_buy_broker_fee">286만 원</p>
                         </div>
@@ -197,7 +197,7 @@
                             <p class="text-[11px] text-slate-400 mt-1" id="txt_move_cost">300만 원</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">단기 거주비(인테리어 대비)</label>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">월세 및 단기 거주비</label>
                             <input type="text" id="rent_cost" value="1,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('rent_cost', this.value)">
                             <p class="text-[11px] text-slate-400 mt-1" id="txt_rent_cost">100만 원</p>
                         </div>
@@ -244,7 +244,7 @@
                                 시간 순 현금 흐름 타임라인 (상세 편집 보드)
                             </h2>
                             <p class="text-[11px] text-slate-500 mt-1">
-                                💡 모든 행의 날짜, 내용, 금액, 소속 분류를 <strong>직접 수정</strong>할 수 있으며, <strong>항목 추가/삭제</strong>가 가능합니다.
+                                💡 모든 행의 날짜, 내용, 금액, 소속 분류를 <strong>직접 수정</strong>할 수 있으며, <strong>항목 상/하 이동 및 추가/삭제</strong>가 가능합니다.
                             </p>
                         </div>
                         <div class="flex gap-2 shrink-0">
@@ -272,11 +272,11 @@
                                 <tr class="border-b border-slate-200 text-slate-400 font-semibold flex items-center w-full text-[11px]">
                                     <th class="py-3 px-1 w-[10%] text-center">일자</th>
                                     <th class="py-3 px-1 w-[16%] text-left">분류</th>
-                                    <th class="py-3 px-1 w-[26%] text-left">내용</th>
+                                    <th class="py-3 px-1 w-[22%] text-left">내용</th>
                                     <th class="py-3 px-1 w-[14%] text-right">입금</th>
                                     <th class="py-3 px-1 w-[14%] text-right">출금</th>
                                     <th class="py-3 px-1 w-[15%] text-right">잔액</th>
-                                    <th class="py-3 px-1 w-[5%] text-center"></th>
+                                    <th class="py-3 px-1 w-[9%] text-center">이동/삭제</th>
                                 </tr>
                             </thead>
                             <tbody id="flow_table_body" class="divide-y divide-slate-100 block w-full">
@@ -307,8 +307,8 @@
         const defaultTransactions = [
             { id: "start", date: "6/4", category: "etc", desc: "현재잔액", income: 50000000, expense: 0, isFixed: true },
             { id: "sell_dep", date: "6/7", category: "sujain", desc: "수자인 계약금 수령", income: 35000000, expense: 0 },
-            { id: "sell_broker", date: "6/8", category: "sujain", desc: "수자인 부동산 복비 지출", income: 0, expense: 1200000 },
             { id: "buy_dep", date: "6/8", category: "shinmiju", desc: "신미주 계약금 지출", income: 0, expense: 65000000 },
+            { id: "sell_broker", date: "6/8", category: "sujain", desc: "수자인 부동산 복비 지출", income: 0, expense: 1200000 },
             { id: "buy_broker", date: "6/8", category: "shinmiju", desc: "신미주 부동산 복비 지출", income: 0, expense: 2860000 },
             { id: "save_6", date: "6/30", category: "etc", desc: "6월 월급 저축", income: 3000000, expense: 0 },
             { id: "save_7", date: "7/31", category: "etc", desc: "7월 월급 저축", income: 3000000, expense: 0 },
@@ -358,16 +358,6 @@
             return (isNegative ? "-" : "") + result.trim();
         }
 
-        function getSortVal(dateStr) {
-            const parts = dateStr.split('/');
-            if (parts.length === 2) {
-                const month = parseInt(parts[0], 10);
-                const day = parseInt(parts[1], 10);
-                return month * 100 + day;
-            }
-            return 9999;
-        }
-
         function resetToDefault() {
             transactions = JSON.parse(JSON.stringify(defaultTransactions));
             syncTransactionsToLeftPanel();
@@ -390,6 +380,20 @@
         function deleteRow(index) {
             transactions.splice(index, 1);
             syncTransactionsToLeftPanel();
+            calculateAndRender();
+        }
+
+        // 행 순서 이동 함수 (위/아래 방향으로 위치 변경 후 자동 재계산)
+        function moveRow(index, direction) {
+            const newIndex = index + direction;
+            // '현재잔액(인덱스 0)' 위로 올리거나 표 범위를 벗어나는 이동 방지
+            if (newIndex <= 0 || newIndex >= transactions.length) return;
+
+            // 순서 맞바꾸기
+            const temp = transactions[index];
+            transactions[index] = transactions[newIndex];
+            transactions[newIndex] = temp;
+
             calculateAndRender();
         }
 
@@ -453,7 +457,7 @@
                 const item = transactions.find(t => t.id === "sell_broker");
                 if (item) item.expense = value;
             } else if (id === "official_price") {
-                const calculatedLoan = Math.min(600000000, Math.floor(value * 0.7));
+                const calculatedLoan = Math.min(400000000, Math.floor(value * 0.7));
                 document.getElementById('buy_loan').value = formatNumberWithCommas(calculatedLoan);
                 
                 const item = transactions.find(t => t.id === "buy_loan_ex");
@@ -537,13 +541,8 @@
         }
 
         function calculateAndRender() {
-            const sorted = transactions.slice();
-            sorted.sort((a, b) => {
-                if (a.id === "start") return -1;
-                if (b.id === "start") return 1;
-                return getSortVal(a.date) - getSortVal(b.date);
-            });
-            transactions = sorted;
+            // 이전에 있던 '날짜 기준 무조건 정렬' 코드를 제거했습니다. 
+            // 이제 사용자가 수동으로 옮긴 배열 순서(transactions) 그대로 렌더링 됩니다.
 
             const curCash = parseRawNumber(document.getElementById('current_cash').value);
             const mSav = parseRawNumber(document.getElementById('monthly_savings').value);
@@ -585,8 +584,8 @@
             document.getElementById('txt_buy_price').innerText = formatWon(bPri);
             document.getElementById('txt_buy_deposit').innerText = formatWon(bDep);
             
-            if (calculatedLoan >= 600000000) {
-                document.getElementById('txt_buy_loan').innerText = formatWon(bLoa) + " (최대 한도 6억 제한 적용)";
+            if (calculatedLoan >= 400000000) {
+                document.getElementById('txt_buy_loan').innerText = formatWon(bLoa) + " (최대 한도 4억 제한 적용)";
             } else {
                 document.getElementById('txt_buy_loan').innerText = formatWon(bLoa) + " (공시지가 70% 자동 계산)";
             }
@@ -638,7 +637,7 @@
                 const tr = document.createElement('tr');
                 tr.className = `${rowBorderClass} ${trBgClass} flex items-center w-full`;
 
-                // 입력 필드의 너비를 % 기반으로 완전히 조정하고 좁은 화면 최적화를 위해 truncate 등 적용
+                // 이동을 위한 위/아래 버튼을 맨 우측에 추가
                 tr.innerHTML = `
                     <td class="py-2 px-1 w-[10%]">
                         <input type="text" value="${item.date}" 
@@ -654,7 +653,7 @@
                             <option value="shinmiju" ${item.category === 'shinmiju' ? 'selected' : ''}>🟣 신미주</option>
                         </select>
                     </td>
-                    <td class="py-2 px-1 w-[26%]">
+                    <td class="py-2 px-1 w-[22%]">
                         <input type="text" value="${item.desc}" 
                             class="w-full bg-transparent border-b border-transparent focus:border-indigo-500 focus:bg-white font-bold text-slate-900 focus:outline-none text-[11px] lg:text-xs truncate"
                             onchange="handleTableEdit(${index}, 'desc', this.value)">
@@ -675,9 +674,15 @@
                     <td class="py-2 px-1 w-[15%] text-right font-black ${accum < 0 ? 'text-rose-600' : 'text-slate-950'} bg-slate-50/20 text-[11px] lg:text-xs truncate">
                         ${formatCommas(accum)}
                     </td>
-                    <td class="py-2 px-1 w-[5%] flex justify-center">
+                    <td class="py-2 px-1 w-[9%] flex justify-center gap-1">
                         ${isStart ? '' : `
-                            <button onclick="deleteRow(${index})" class="text-slate-300 hover:text-rose-500 p-0.5 rounded transition">
+                            <button onclick="moveRow(${index}, -1)" class="text-slate-400 hover:text-indigo-600 p-0.5 rounded transition" title="위로 올리기">
+                                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="moveRow(${index}, 1)" class="text-slate-400 hover:text-indigo-600 p-0.5 rounded transition" title="아래로 내리기">
+                                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="deleteRow(${index})" class="text-slate-300 hover:text-rose-500 p-0.5 rounded transition" title="삭제">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                         `}
