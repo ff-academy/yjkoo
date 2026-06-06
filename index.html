@@ -31,7 +31,6 @@
 
     <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         
-        <!-- 대시보드 카드 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">보유 잔고</p>
@@ -54,10 +53,8 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- 좌측 조작 패널 -->
             <div class="lg:col-span-5 space-y-6">
                 
-                <!-- 기본 자산 및 고정 수입 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                     <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="wallet" class="w-5 h-5 text-indigo-600"></i>
@@ -78,7 +75,6 @@
                     </div>
                 </div>
 
-                <!-- 매도 주택 (수자인) -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -125,7 +121,6 @@
                     </div>
                 </div>
 
-                <!-- 매입 주택 (신미주) -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="key-round" class="w-5 h-5 text-indigo-600"></i>
@@ -179,7 +174,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="col-span-2">
                             <div class="flex items-center justify-between mb-1">
-                                <label class="block text-xs font-semibold text-slate-500">신미주 중개 보수 (복비)</label>
+                                <label class="block text-xs font-semibold text-slate-500">신미주 중개수수료(VAT+)</label>
                                 <span class="text-[9px] bg-indigo-50 text-indigo-700 px-1 py-0.5 rounded font-bold">0.4% * 1.1 VAT포함</span>
                             </div>
                             <input type="text" id="buy_broker_fee" value="2,631,200" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('buy_broker_fee', this.value)">
@@ -196,7 +191,6 @@
                     </div>
                 </div>
 
-                <!-- 인테리어 비용 정보 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="paint-bucket" class="w-5 h-5 text-orange-500"></i>
@@ -204,28 +198,30 @@
                     </h2>
                     
                     <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">인테리어 총액</label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-semibold text-slate-500">인테리어 총액</label>
+                            <span class="text-[9px] bg-orange-50 text-orange-700 px-1 py-0.5 rounded font-bold">변경 시 10/50/40% 자동분배</span>
+                        </div>
                         <input type="text" id="interior_total" value="50,000,000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm" oninput="handleLeftInput('interior_total', this.value)">
                         <p class="text-[11px] text-orange-600 mt-1" id="txt_interior_total">5,000만 원</p>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2 bg-orange-50/50 p-3 rounded-xl border border-orange-100 text-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-orange-50/50 p-3 rounded-xl border border-orange-100 text-center">
                         <div>
-                            <p class="text-[10px] font-bold text-orange-950">계약금 (10%)</p>
-                            <p class="text-xs font-extrabold text-orange-700 mt-0.5" id="txt_interior_dep">500만 원</p>
+                            <p class="text-[10px] font-bold text-orange-950 mb-1">계약금(10%)</p>
+                            <input type="text" id="interior_dep" value="5,000,000" class="w-full bg-white border border-orange-200 focus:border-orange-500 rounded-md p-1.5 font-extrabold text-xs text-center text-orange-700 outline-none transition" oninput="handleLeftInput('interior_dep', this.value)">
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold text-orange-950">중도금 (50%)</p>
-                            <p class="text-xs font-extrabold text-orange-700 mt-0.5" id="txt_interior_mid">2,500만 원</p>
+                            <p class="text-[10px] font-bold text-orange-950 mb-1">중도금(50%)</p>
+                            <input type="text" id="interior_mid" value="25,000,000" class="w-full bg-white border border-orange-200 focus:border-orange-500 rounded-md p-1.5 font-extrabold text-xs text-center text-orange-700 outline-none transition" oninput="handleLeftInput('interior_mid', this.value)">
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold text-orange-950">잔금 (40%)</p>
-                            <p class="text-xs font-extrabold text-orange-700 mt-0.5" id="txt_interior_rem">2,000만 원</p>
+                            <p class="text-[10px] font-bold text-orange-950 mb-1">잔금(40%)</p>
+                            <input type="text" id="interior_rem" value="20,000,000" class="w-full bg-white border border-orange-200 focus:border-orange-500 rounded-md p-1.5 font-extrabold text-xs text-center text-orange-700 outline-none transition" oninput="handleLeftInput('interior_rem', this.value)">
                         </div>
                     </div>
                 </div>
 
-                <!-- 이사 및 기타 비용 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="truck" class="w-5 h-5 text-amber-500"></i>
@@ -261,10 +257,8 @@
 
             </div>
 
-            <!-- 우측 테이블 및 타임라인 패널 -->
             <div class="lg:col-span-7 space-y-6">
                 
-                <!-- 자금 모니터링 게이지 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-1.5">
                         <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
@@ -280,7 +274,6 @@
                     </div>
                 </div>
 
-                <!-- 타임라인 상세 편집 보드 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 overflow-hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                         <div>
@@ -289,7 +282,7 @@
                                 시간 순 현금 흐름 타임라인 (상세 편집 보드)
                             </h2>
                             <p class="text-[11px] text-slate-500 mt-1">
-                                💡 모든 행의 날짜, 내용, 금액, 소속 분류를 <strong>직접 수정</strong>할 수 있으며, <strong>항목 상/하 이동 및 추가/삭제</strong>가 가능합니다.
+                                💡 날짜를 변경하면 <strong>자동으로 순서가 정렬</strong>되며, 모든 행의 내용과 금액은 직접 수정/추가/삭제가 가능합니다.
                             </p>
                         </div>
                         <div class="flex gap-2 shrink-0">
@@ -304,7 +297,6 @@
                         </div>
                     </div>
 
-                    <!-- 분류 가이드에 인테리어 추가 -->
                     <div class="flex flex-wrap gap-3 text-[11px] bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
                         <span class="font-bold text-slate-500">📂 분류 색상 가이드:</span>
                         <span class="inline-flex items-center gap-1 text-emerald-800"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> 수자인 (매도)</span>
@@ -319,11 +311,11 @@
                                 <tr class="border-b border-slate-200 text-slate-400 font-semibold flex items-center w-full text-[11px]">
                                     <th class="py-3 px-1 w-[10%] text-center">일자</th>
                                     <th class="py-3 px-1 w-[16%] text-left">분류</th>
-                                    <th class="py-3 px-1 w-[22%] text-left">내용</th>
+                                    <th class="py-3 px-1 w-[26%] text-left">내용</th>
                                     <th class="py-3 px-1 w-[14%] text-right">입금</th>
                                     <th class="py-3 px-1 w-[14%] text-right">출금</th>
                                     <th class="py-3 px-1 w-[15%] text-right">잔액</th>
-                                    <th class="py-3 px-1 w-[9%] text-center">이동/삭제</th>
+                                    <th class="py-3 px-1 w-[5%] text-center">삭제</th>
                                 </tr>
                             </thead>
                             <tbody id="flow_table_body" class="divide-y divide-slate-100 block w-full">
@@ -351,7 +343,6 @@
     </footer>
 
     <script>
-        // 기본 트랜잭션 정의 (신미주 중도금 및 인테리어 3단계 분할 항목 추가)
         const defaultTransactions = [
             { id: "start", date: "6/4", category: "etc", desc: "현재잔액", income: 50000000, expense: 0, isFixed: true },
             { id: "sell_dep", date: "6/7", category: "sujain", desc: "수자인 계약금 수령", income: 35000000, expense: 0 },
@@ -410,6 +401,17 @@
             return (isNegative ? "-" : "") + result.trim();
         }
 
+        // 날짜 가중치 구하는 헬퍼 함수 (정렬 목적)
+        function getSortVal(dateStr) {
+            const parts = dateStr.split('/');
+            if (parts.length === 2) {
+                const month = parseInt(parts[0], 10);
+                const day = parseInt(parts[1], 10);
+                return month * 100 + day;
+            }
+            return 9999;
+        }
+
         function resetToDefault() {
             transactions = JSON.parse(JSON.stringify(defaultTransactions));
             syncTransactionsToLeftPanel();
@@ -432,17 +434,6 @@
         function deleteRow(index) {
             transactions.splice(index, 1);
             syncTransactionsToLeftPanel();
-            calculateAndRender();
-        }
-
-        function moveRow(index, direction) {
-            const newIndex = index + direction;
-            if (newIndex <= 0 || newIndex >= transactions.length) return;
-
-            const temp = transactions[index];
-            transactions[index] = transactions[newIndex];
-            transactions[newIndex] = temp;
-
             calculateAndRender();
         }
 
@@ -564,19 +555,31 @@
                 const item = transactions.find(t => t.id === "refund");
                 if (item) item.income = value;
             } else if (id === "interior_total") {
-                // 인테리어 10%, 50%, 40% 자동 타임라인 세팅
+                // 인테리어 총액 수정 시 10%, 50%, 40% 로 기본 세팅 및 하위 항목 반영
                 const depVal = Math.floor(value * 0.1);
                 const midVal = Math.floor(value * 0.5);
                 const remVal = value - depVal - midVal;
 
+                document.getElementById('interior_dep').value = formatNumberWithCommas(depVal);
+                document.getElementById('interior_mid').value = formatNumberWithCommas(midVal);
+                document.getElementById('interior_rem').value = formatNumberWithCommas(remVal);
+
                 const depItem = transactions.find(t => t.id === "int_dep");
                 if (depItem) depItem.expense = depVal;
-
                 const midItem = transactions.find(t => t.id === "int_mid");
                 if (midItem) midItem.expense = midVal;
-
                 const remItem = transactions.find(t => t.id === "int_rem");
                 if (remItem) remItem.expense = remVal;
+            } else if (id === "interior_dep") {
+                // 인테리어 각 항목 수동 수정
+                const item = transactions.find(t => t.id === "int_dep");
+                if (item) item.expense = value;
+            } else if (id === "interior_mid") {
+                const item = transactions.find(t => t.id === "int_mid");
+                if (item) item.expense = value;
+            } else if (id === "interior_rem") {
+                const item = transactions.find(t => t.id === "int_rem");
+                if (item) item.expense = value;
             }
         }
 
@@ -606,6 +609,12 @@
                     document.getElementById('tax_cost').value = formatCommas(t.expense);
                 } else if (t.id === "refund") {
                     document.getElementById('baby_refund').value = formatCommas(t.income);
+                } else if (t.id === "int_dep") {
+                    document.getElementById('interior_dep').value = formatCommas(t.expense);
+                } else if (t.id === "int_mid") {
+                    document.getElementById('interior_mid').value = formatCommas(t.expense);
+                } else if (t.id === "int_rem") {
+                    document.getElementById('interior_rem').value = formatCommas(t.expense);
                 }
             });
 
@@ -634,6 +643,15 @@
         }
 
         function calculateAndRender() {
+            // 날짜 자동 정렬 재적용
+            const sorted = transactions.slice();
+            sorted.sort((a, b) => {
+                if (a.id === "start") return -1;
+                if (b.id === "start") return 1;
+                return getSortVal(a.date) - getSortVal(b.date);
+            });
+            transactions = sorted;
+
             const curCash = parseRawNumber(document.getElementById('current_cash').value);
             const mSav = parseRawNumber(document.getElementById('monthly_savings').value);
             const sPri = parseRawNumber(document.getElementById('sell_price').value);
@@ -660,19 +678,11 @@
             const tCos = parseRawNumber(document.getElementById('tax_cost').value);
             const bRef = parseRawNumber(document.getElementById('baby_refund').value);
 
-            // 인테리어 총비용 가치 분산화
-            const iTot = parseRawNumber(document.getElementById('interior_total').value);
-            const iDep = Math.floor(iTot * 0.1);
-            const iMid = Math.floor(iTot * 0.5);
-            const iRem = iTot - iDep - iMid;
-
-            // 실시간 인테리어 금액 객체와 동기화
-            const intDepItem = transactions.find(t => t.id === "int_dep");
-            if (intDepItem) intDepItem.expense = iDep;
-            const intMidItem = transactions.find(t => t.id === "int_mid");
-            if (intMidItem) intMidItem.expense = iMid;
-            const intRemItem = transactions.find(t => t.id === "int_rem");
-            if (intRemItem) intRemItem.expense = iRem;
+            // 각 개별 입력칸을 기반으로 인테리어 비용 읽어오기
+            const iDep = parseRawNumber(document.getElementById('interior_dep').value);
+            const iMid = parseRawNumber(document.getElementById('interior_mid').value);
+            const iRem = parseRawNumber(document.getElementById('interior_rem').value);
+            const iTot = iDep + iMid + iRem;
 
             // 결과 산식 업데이트
             const remainingSellCash = sPri - sDep - sRep;
@@ -706,11 +716,8 @@
             document.getElementById('txt_tax_cost').innerText = formatWon(tCos);
             document.getElementById('txt_baby_refund').innerText = formatWon(bRef);
 
-            // 인테리어 세부 텍스트
+            // 인테리어 총액 동기화
             document.getElementById('txt_interior_total').innerText = formatWon(iTot);
-            document.getElementById('txt_interior_dep').innerText = formatWon(iDep);
-            document.getElementById('txt_interior_mid').innerText = formatWon(iMid);
-            document.getElementById('txt_interior_rem').innerText = formatWon(iRem);
 
             const tbody = document.getElementById('flow_table_body');
             tbody.innerHTML = '';
@@ -773,7 +780,7 @@
                             <option value="interior" ${item.category === 'interior' ? 'selected' : ''}>🎨 인테리어</option>
                         </select>
                     </td>
-                    <td class="py-2 px-1 w-[22%]">
+                    <td class="py-2 px-1 w-[26%]">
                         <input type="text" value="${item.desc}" 
                             class="w-full bg-transparent border-b border-transparent focus:border-indigo-500 focus:bg-white font-bold text-slate-900 focus:outline-none text-[11px] lg:text-xs truncate"
                             onchange="handleTableEdit(${index}, 'desc', this.value)">
@@ -794,14 +801,8 @@
                     <td class="py-2 px-1 w-[15%] text-right font-black ${accum < 0 ? 'text-rose-600' : 'text-slate-950'} bg-slate-50/20 text-[11px] lg:text-xs truncate">
                         ${formatCommas(accum)}
                     </td>
-                    <td class="py-2 px-1 w-[9%] flex justify-center gap-1">
+                    <td class="py-2 px-1 w-[5%] flex justify-center gap-1">
                         ${isStart ? '' : `
-                            <button onclick="moveRow(${index}, -1)" class="text-slate-400 hover:text-indigo-600 p-0.5 rounded transition" title="위로 올리기">
-                                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
-                            </button>
-                            <button onclick="moveRow(${index}, 1)" class="text-slate-400 hover:text-indigo-600 p-0.5 rounded transition" title="아래로 내리기">
-                                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
-                            </button>
                             <button onclick="deleteRow(${index})" class="text-slate-300 hover:text-rose-500 p-0.5 rounded transition" title="삭제">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
